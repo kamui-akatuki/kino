@@ -41,7 +41,7 @@ endfunction
 function s:serial_config()
   let conf2=copy(s:subconf)
   let conf1=copy(s:winconf)
-  let g:kino_ports=split(system("ls /dev/cu.*"),"\n")
+  let g:kino_ports=split(system("ls /dev/tty*"),"\n")
   let conf1.col=s:width/4
   let conf2.col=conf1.col-2
   let conf1.width=s:width*3/8
@@ -80,9 +80,11 @@ function s:CreateMenu(menus)
   autocmd! WinClosed *
   let p=getcurpos()
   let conf={"style":"minimal","relative":"editor","width":s:width/4,"height":len(a:menus),"row":s:height/8+p[1],"col":s:width/4+p[2]-1,"focusable":v:false}
-  let id=nvim_open_win(nvim_create_buf(v:false,v:true),v:true,conf)
-  call nvim_win_set_option(id,"winhighlight","Normal:selected_background")
+  let s:menu_id=nvim_open_win(nvim_create_buf(v:false,v:true),v:true,conf)
+  call nvim_win_set_option(s:menu_id,"winhighlight","Normal:selected_background")
   call setline(1,a:menus)
+  nnoremap <buffer> j j
+  nnoremap <buffer> k k
   nnoremap <buffer> <ESC> :call <SID>CloseMenu("")<CR>
   nnoremap <buffer> <Return> :call <SID>CloseMenu(getline(getcurpos()[1]))<CR>
 endfunction
