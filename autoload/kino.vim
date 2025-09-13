@@ -12,8 +12,15 @@ function s:init()
   let s:subconf={"style":"minimal","relative":"editor","width":s:width*3/4+4,"height":s:height*3/4+2,"row":s:height/8-1,"col":s:width/8-2,"focusable":v:false}
 endfunction
 call s:init()
-hi! blue ctermfg=cyan
-hi! selected_background ctermbg=90 ctermfg=black
+hi! blue ctermfg=cyan guifg=#00ffff
+hi! selected_background ctermbg=90 ctermfg=black guibg=#ff5599 guifg=#000000
+
+function kino#Clear()
+  call s:CloseWin()
+  call s:CreateWin(s:subconf,s:winconf)
+  term platformio run --target erase
+  normal G
+endfunction
 
 function kino#Upload()
   call s:CloseWin()
