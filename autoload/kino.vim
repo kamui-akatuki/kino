@@ -5,6 +5,9 @@ let s:port="null"
 let s:speed="115200"
 let s:baudrate=[9600,115200]
 let s:serial_flag=0
+let s:config_winid=0
+hi! blue ctermbg=cyan guibg=#00ffff
+hi! selected_background ctermbg=90 ctermfg=black guibg=#ff5599 guifg=#000000
 function s:init()
   let s:width=nvim_get_option("columns")
   let s:height=nvim_get_option("lines")
@@ -12,8 +15,6 @@ function s:init()
   let s:subconf={"style":"minimal","relative":"editor","width":s:width*3/4+4,"height":s:height*3/4+2,"row":s:height/8-1,"col":s:width/8-2,"focusable":v:false}
 endfunction
 call s:init()
-hi! blue ctermfg=cyan guifg=#00ffff
-hi! selected_background ctermbg=90 ctermfg=black guibg=#ff5599 guifg=#000000
 
 function kino#Clear()
   call s:CloseWin()
@@ -55,7 +56,7 @@ function s:serial_config()
   let conf2.width=conf1.width+4
   let conf1.height=3
   let conf2.height=conf1.height+2
-  call s:CreateWin(conf2,conf1)
+  let g:config_winid=s:CreateWin(conf2,conf1)
   call setline(1,"Port     ".s:port)
   call setline(2,"BaudRate ".s:speed)
   call setline(3,"         OK")
@@ -98,6 +99,7 @@ endfunction
 
 function s:CloseMenu(result)
   q
+  call win_gotoid(g:config_winid)
   if a:result!=""
     let p=getcurpos()
     if p[1]==1
